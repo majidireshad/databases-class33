@@ -15,8 +15,22 @@ const processQuery = async (query) => {
   const result_of_query = await execQuery(query);
   console.table(result_of_query);
 };
+//Names of authors and their mentors
+const authors_mentors = `SELECT
+au1.author_name AS author,
+au2.author_name AS mentor 
+FROM authors au1 
+LEFT JOIN authors au2 
+ON au1.mentor = au2.author_no;`;
 
-//All research papers and the number of authors that wrote that paper
+// all columns of authors and their published paper_title
+const authors_papers = `SELECT *, paper_title FROM authors
+left join author_research
+on authors.author_no = author_research.author_id
+left join research_Papers
+on research_Papers.paper_id = author_research.paper_no;`;
+
+//All research papers and the number of authors that published them
 const all_research_papers = `SELECT paper_title, COUNT(author_id) AS authors_number
 FROM research_Papers
 JOIN author_research
@@ -24,7 +38,7 @@ on author_research.paper_no = research_Papers.paper_id
 group by paper_title;             
 `;
 
-//Sum of the research papers published by all female authors.
+//Sum of the research papers published by all female authors
 
 const sum_papers_female_authors = ` SELECT count(paper_no) AS researches_number
 FROM author_research
@@ -39,7 +53,7 @@ FROM authors
 GROUP BY university;
 `;
 
-//Sum of the research papers of the authors per university.
+//Sum of the research papers for authors per university
 
 const sum_papers_per_university = `SELECT university, count(paper_no) AS researches_number 
 FROM author_research
@@ -48,13 +62,15 @@ ON author_research.author_id = authors.author_no
 GROUP BY university;
 `;
 
-//Minimum and maximum of the h-index of all authors per university.
+//Minimum and maximum of h-indexes for all authors per university
 
 const min_max_h_index = `SELECT university, MIN(h_index), MAX(h_index) 
 FROM authors
 GROUP BY university;
 `;
 try {
+  processQuery(authors_mentors);
+  processQuery(authors_papers);
   processQuery(all_research_papers);
   processQuery(sum_papers_female_authors);
   processQuery(average_h_index);
