@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 });
 const execQuery = util.promisify(connection.query.bind(connection));
 
-const createDatabase = async () => {
+const seedDatabase = async () => {
   const create_authors_table = `CREATE TABLE IF NOT EXISTS authors (
     author_no INT NOT NULL,
     author_name VARCHAR(255), 
@@ -76,4 +76,4 @@ const createDatabase = async () => {
   }
   connection.end();
 };
-createDatabase();
+seedDatabase();
