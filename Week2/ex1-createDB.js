@@ -2,7 +2,6 @@ const mysql = require("mysql");
 const util = require("util");
 const { authorsData, mentors } = require("./data");
 
-//create connection
 const connection = mysql.createConnection({
   host: "localhost",
   user: "hyfuser",
@@ -22,20 +21,22 @@ const createDatabase = async () => {
     PRIMARY KEY (author_no)
     );`;
 
+  //adding mentor column and foreign key
   const addMentorColumn = `ALTER TABLE authors ADD COLUMN mentor INT`;
   const addFkMentor = `ALTER TABLE authors ADD CONSTRAINT fk_mentor FOREIGN KEY(mentor) REFERENCES authors(author_no)`;
   connection.connect();
   try {
     await execQuery("DROP DATABASE IF EXISTS scholars");
     await execQuery("CREATE DATABASE scholars");
+    console.log("database is created!");
     await execQuery("USE scholars");
     await execQuery(create_authors_table);
-
     await execQuery(addMentorColumn);
     await execQuery(addFkMentor);
     authorsData.forEach(async (author) => {
       await execQuery("INSERT INTO authors SET ?", author);
     });
+    //adding mentors data based on author_no numbers
     for (let i = 0; i < mentors.length; i++) {
       await execQuery(
         `UPDATE authors SET mentor = ${mentors[i]} where author_no = ${i + 1}`

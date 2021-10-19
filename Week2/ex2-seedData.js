@@ -12,8 +12,7 @@ const connection = mysql.createConnection({
 const execQuery = util.promisify(connection.query.bind(connection));
 
 const seedDatabases = async () => {
-  const checkResearchPapers = "DROP TABLE IF EXISTS research_Papers";
-  const tableResearchPapers = `CREATE TABLE research_Papers (
+  const tableResearchPapers = `CREATE TABLE IF NOT EXISTS research_Papers (
       paper_id INT PRIMARY KEY,
       paper_title VARCHAR(255), 
       conference VARCHAR(255), 
@@ -21,9 +20,7 @@ const seedDatabases = async () => {
       );`;
 
   // The relation between research_Papers and authors is many to many
-  const checkFK = "ALTER TABLE author_research DROP FOREIGN KEY fk_pap;";
-  const checkAuthorsVSPapers = "DROP TABLE IF EXISTS author_research";
-  const tableAuthorVSPaper = `CREATE TABLE author_research( 
+  const tableAuthorVSPaper = `CREATE TABLE IF NOT EXISTS author_research( 
     author_id int,
     paper_no int,
     PRIMARY KEY(author_id, paper_no),
@@ -31,10 +28,7 @@ const seedDatabases = async () => {
     CONSTRAINT fk_pap FOREIGN KEY(paper_no) REFERENCES research_Papers(paper_id))`;
   connection.connect();
   try {
-    await execQuery(checkFK);
-    await execQuery(checkResearchPapers);
     await execQuery(tableResearchPapers);
-    await execQuery(checkAuthorsVSPapers);
     await execQuery(tableAuthorVSPaper);
     researchPaperData.forEach(async (researchPaper) => {
       await execQuery("INSERT INTO research_Papers SET ?", researchPaper);

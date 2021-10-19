@@ -1,15 +1,16 @@
 const mysql = require("mysql");
 const util = require("util");
-//create connection
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "hyfuser",
   password: "hyfpassword",
   database: "scholars",
 });
-//Connect util with database to handle the query as promise
+
 const execQuery = util.promisify(connection.query.bind(connection));
 connection.connect();
+
 const processQuery = async (query) => {
   const result_of_query = await execQuery(query);
   console.table(result_of_query);
