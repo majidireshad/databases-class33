@@ -24,23 +24,23 @@ LEFT JOIN authors au2
 ON au1.mentor = au2.author_no;`;
 
 // all columns of authors and their published paper_title
-const authors_papers = `SELECT *, paper_title FROM authors
+const authors_papers = `SELECT authors.*, research_Papers.paper_title FROM authors
 left join author_research
 on authors.author_no = author_research.author_id
 left join research_Papers
 on research_Papers.paper_id = author_research.paper_no;`;
 
 //All research papers and the number of authors that published them
-const all_research_papers = `SELECT paper_title, COUNT(author_id) AS authors_number
+const all_research_papers = `SELECT paper_title, COUNT(author_id) 'Number of authors'
 FROM research_Papers
 JOIN author_research
 on author_research.paper_no = research_Papers.paper_id
-group by paper_title;             
+group by paper_id;             
 `;
 
 //Sum of the research papers published by all female authors
 
-const sum_papers_female_authors = ` SELECT count(paper_no) AS researches_number
+const sum_papers_female_authors = ` SELECT COUNT(DISTINCT(paper_no)) 'Number of papers by female authors'
 FROM author_research
 LEFT JOIN authors
 ON author_research.author_id = authors.author_no
@@ -55,7 +55,7 @@ GROUP BY university;
 
 //Sum of the research papers for authors per university
 
-const sum_papers_per_university = `SELECT university, count(paper_no) AS researches_number 
+const sum_papers_per_university = `SELECT university, COUNT(DISTINCT(paper_no)) AS researches_number 
 FROM author_research
 JOIN authors
 ON author_research.author_id = authors.author_no
