@@ -1,0 +1,12 @@
+1- exported csv tables from mysql using mysql command line
+2-installed MongoDB community server for windows in a customized location
+3-created a data folder that includes a db folder 
+4-run mongodb.exe via windows powershell
+5-run mongo via windows powershell
+6-created a .bat file to unify the process of running mongo and make it more accessible
+7-added the path of installation files to variable paths in the system
+8-created Atlas account and extracted a url to connect with Node
+9-imported csv files using mongoimport tool
+11-created 4 js files for every query
+12-added mongodb package password and url to the js file 
+
