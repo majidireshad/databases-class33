@@ -1,0 +1,13 @@
+The following collumns violate 1NF rules:
+6_food_code
+7-food_description
+
+The following entities can be extracted:
+members 
+venues
+foods 
+
+member_id, member_name, member_address
+dinner_id, dinner_date
+member_id, dinner_id, venue_code
+
